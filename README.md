@@ -1,6 +1,15 @@
 # aws-c7n-wazuh-extension
 An extension to integrate aws c7n and wazuh
 
+# Installation
+Download the repo and move the src script into the aws wodle directory.
+```bash
+git clone https://github.com/orlando-jamie/aws-c7n-wazuh-extension.git
+cp aws-c7n-wazuh-extension/src/aws_c7n.py /var/ossec/wodles/aws/
+chown root:ossec /var/ossec/wodles/aws/aws_c7n.py
+chmod 0750 /var/ossec/wodles/aws/aws_c7n.py
+```
+
 # Scope
 This script assumes the existence of an SQS queue dedicated to aws C7N alerts that Wazuh can fully control. We will be deleting messages once we are done processing them.
 
