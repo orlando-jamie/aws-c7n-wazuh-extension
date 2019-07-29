@@ -5,6 +5,7 @@ An extension to integrate aws c7n and wazuh
 This script assumes the existence of an SQS queue dedicated to aws C7N alerts that Wazuh can fully control. We will be deleting messages once we are done processing them.
 
 # Example C7N Configuration
+```yml
 actions:
     - type: notify
       to: 
@@ -13,7 +14,8 @@ actions:
         type: sqs
         region: "{sqs_region}"
         queue: "https://sqs.{sqs_region}.amazonaws.com/{account_id}/{queue_name}"
-        
+```
+
 # Example Wazuh Configuration
 To run this extension, we prefer to run through the generic command wodle. botocore and boto3 are already installed in the embedded python3 environment
 
