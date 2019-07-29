@@ -17,6 +17,7 @@ actions:
 # Example Wazuh Configuration
 To run this extension, we prefer to run through the generic command wodle. botocore and boto3 are already installed in the embedded python3 environment
 
+```xml
 <wodle name="command">
     <disabled>no</disabled>
     <tag>aws-c7n</tag>
@@ -26,11 +27,13 @@ To run this extension, we prefer to run through the generic command wodle. botoc
     <run_on_start>no</run_on_start>
     <timeout>21600</timeout>
 </wodle>
+```
   
-  # Rules
-  Tentatively taking up RuleIds:105000
-  
-  <group name="amazon,aws,c7n,">
+# Rules
+Tentatively taking up RuleIds:105000
+
+```xml
+<group name="amazon,aws,c7n,">
     <!-- aws.c7n wodle -->
     <rule id="105000" level="7">
         <decoded_as>json</decoded_as>
@@ -38,3 +41,4 @@ To run this extension, we prefer to run through the generic command wodle. botoc
         <description>c7n alert</description>
     </rule>
 </group>
+```
