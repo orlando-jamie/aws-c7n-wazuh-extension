@@ -156,13 +156,13 @@ class C7nSqsQueue:
         wazuh_message = {
           "integration": "aws.c7n",
           "msg": "c7n Result", 
-          "policy_name": message_body.get("policy").get("name"),
+          "policy_name": message_body.get("policy", {}).get("name"),
           "aws_account_id": message_body.get("account_id"),
           "aws_account_name": message_body.get("account"),
           "region": message_body.get("region"),
           "execution_id": message_body.get("execution_id"),
           "execution_start": message_body.get("execution_start"),
-          "comment": message_body.get("comment"),
+          "comment": message_body.get("policy", {}).get("comment"),
           "resource": resource,
         }
         self.send_msg(wazuh_message)
