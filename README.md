@@ -1,6 +1,30 @@
 # aws-c7n-wazuh-extension
 An extension to integrate aws c7n and wazuh
 
+# Usage
+``` bash
+usage: usage: tl_aws_c7n.py [options]
+
+Wazuh wodle for monitoring AWS
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DEBUG, --debug DEBUG
+                        Enable debug
+  -a ACCESS_KEY, --access_key ACCESS_KEY
+                        S3 Access key credential
+  -k SECRET_KEY, --secret_key SECRET_KEY
+                        S3 Secret key credential
+  -p AWS_PROFILE, --aws_profile AWS_PROFILE
+                        The name of credential profile to use
+  -i IAM_ROLE_ARN, --iam_role_arn IAM_ROLE_ARN
+                        ARN of IAM role to assume for access to S3 bucket
+  -n AWS_ACCOUNT_ALIAS, --aws_account_alias AWS_ACCOUNT_ALIAS
+                        AWS Account ID Alias
+  -q SQS_QUEUE_URL, --sqs_queue_url SQS_QUEUE_URL
+                        sqs_queue_url for c7n queue
+```
+
 # Installation
 Download the repo and move the src script into the aws wodle directory.
 ```bash
