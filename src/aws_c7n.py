@@ -201,8 +201,6 @@ def get_script_arguments():
   parser.add_argument('-i', '--iam_role_arn', dest='iam_role_arn',
                       help='ARN of IAM role to assume for access to S3 bucket',
                       default=None)
-  parser.add_argument('-n', '--aws_account_alias', dest='aws_account_alias',
-                      help='AWS Account ID Alias', default='')
   parser.add_argument('-q', '--sqs_queue_url', dest='sqs_queue_url',
                       help='sqs_queue_url for c7n queue', type=arg_sqs_queue_url, default=None)
   return parser.parse_args()
