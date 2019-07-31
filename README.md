@@ -3,7 +3,7 @@ An extension to integrate aws c7n and wazuh
 
 # Usage
 ``` bash
-usage: aws_c7n.py [options]
+usage: usage: aws_c7n.py [options]
 
 Wazuh wodle for monitoring AWS
 
@@ -19,8 +19,6 @@ optional arguments:
                         The name of credential profile to use
   -i IAM_ROLE_ARN, --iam_role_arn IAM_ROLE_ARN
                         ARN of IAM role to assume for access to S3 bucket
-  -n AWS_ACCOUNT_ALIAS, --aws_account_alias AWS_ACCOUNT_ALIAS
-                        AWS Account ID Alias
   -q SQS_QUEUE_URL, --sqs_queue_url SQS_QUEUE_URL
                         sqs_queue_url for c7n queue
 ```
