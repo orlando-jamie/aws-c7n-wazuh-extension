@@ -136,40 +136,44 @@ class C7nSqsQueue:
   def iter_queue(self):
     debug("+++ Working on SQS queue: {0}".format(self.sqs_queue_url), 1)
     sqs_client = self.get_client(service_name='sqs', region=self.sqs_region)
-    sqs_response = sqs_client.receive_message(QueueUrl=self.sqs_queue_url,
-                          MaxNumberOfMessages=RECEIVE_MESSAGE_BATCH_SIZE)
-    for sqs_message in sqs_response.get("Messages",[]):
-      b64_encoded_message_body = sqs_message['Body']
-      compressed_message_body = base64.b64decode(b64_encoded_message_body)
-      message_body_text = zlib.decompress(compressed_message_body)
-      receipt_handle = sqs_message.get('ReceiptHandle', None)
-      try:
-        message_body = json.loads(message_body_text)
-        # If we want to search for "wazuh" in to: field, use the following
-        # if "wazuh" in message_body.get('action', {}).get('to', []):
-        # Right now, we are assuming the whole queue is for wazuh to process
-      except Exception as e:
-        print(e)
-        pass
-      # Now process message into wazuh
-      for resource in message_body.get("resources", []):
-        wazuh_message = {
-          "integration": "aws.c7n",
-          "msg": "c7n Result", 
-          "policy_name": message_body.get("policy", {}).get("name"),
-          "aws_account_id": message_body.get("account_id"),
-          "aws_account_name": message_body.get("account"),
-          "region": message_body.get("region"),
-          "execution_id": message_body.get("execution_id"),
-          "execution_start": message_body.get("execution_start"),
-          "comment": message_body.get("policy", {}).get("comment"),
-          "resource": resource,
-        }
-        self.send_msg(wazuh_message)
-        # if successfull, delete message
-        if receipt_handle is not None:
-          self.delete_processed_message(sqs_client, receipt_handle)
-      return
+    unread_messages = True
+    while unread_messages:
+      sqs_response = sqs_client.receive_message(QueueUrl=self.sqs_queue_url,
+                            MaxNumberOfMessages=RECEIVE_MESSAGE_BATCH_SIZE)
+      sqs_messages = sqs_response.get("Messages",[])
+      unread_messages = True if len(sqs_messages) > 0 else False
+      for sqs_message in sqs_messages:
+        b64_encoded_message_body = sqs_message['Body']
+        compressed_message_body = base64.b64decode(b64_encoded_message_body)
+        message_body_text = zlib.decompress(compressed_message_body)
+        receipt_handle = sqs_message.get('ReceiptHandle', None)
+        try:
+          message_body = json.loads(message_body_text)
+          # If we want to search for "wazuh" in to: field, use the following
+          # if "wazuh" in message_body.get('action', {}).get('to', []):
+          # Right now, we are assuming the whole queue is for wazuh to process
+        except Exception as e:
+          print(e)
+          pass
+        # Now process message into wazuh
+        for resource in message_body.get("resources", []):
+          wazuh_message = {
+            "integration": "aws.c7n",
+            "msg": "c7n Result", 
+            "policy_name": message_body.get("policy", {}).get("name"),
+            "aws_account_id": message_body.get("account_id"),
+            "aws_account_name": message_body.get("account"),
+            "region": message_body.get("region"),
+            "execution_id": message_body.get("execution_id"),
+            "execution_start": message_body.get("execution_start"),
+            "comment": message_body.get("policy", {}).get("comment"),
+            "resource": resource,
+          }
+          self.send_msg(wazuh_message)
+          # if successfull, delete message
+          if receipt_handle is not None:
+            self.delete_processed_message(sqs_client, receipt_handle)
+    return
 
   def delete_processed_message(self, sqs_client, receipt_handle):
     delete_message_args = {"QueueUrl": self.sqs_queue_url, "ReceiptHandle": receipt_handle}
