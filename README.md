@@ -2,7 +2,7 @@
 An extension to integrate aws c7n and wazuh
 
 # Usage
-``` bash
+```
 usage: aws_c7n.py [options]
 
 Wazuh wodle for monitoring AWS
