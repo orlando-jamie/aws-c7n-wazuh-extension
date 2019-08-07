@@ -156,19 +156,16 @@ class C7nSqsQueue:
           print(e)
           pass
         # Now process message into wazuh
+        keylist = [key for key in message_body.keys()]
+        keylist.remove("resources")
         for resource in message_body.get("resources", []):
           wazuh_message = {
             "integration": "aws.c7n",
-            "msg": "c7n Result", 
-            "policy_name": message_body.get("policy", {}).get("name"),
-            "aws_account_id": message_body.get("account_id"),
-            "aws_account_name": message_body.get("account"),
-            "region": message_body.get("region"),
-            "execution_id": message_body.get("execution_id"),
-            "execution_start": message_body.get("execution_start"),
-            "comment": message_body.get("policy", {}).get("comment"),
+            "msg": "c7n Result",
             "resource": resource,
           }
+          for key in keylist:
+            wazuh_message[key] = message_body[key]
           self.send_msg(wazuh_message)
           # if successfull, delete message
           if receipt_handle is not None:
