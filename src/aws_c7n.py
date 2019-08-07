@@ -162,7 +162,7 @@ class C7nSqsQueue:
           wazuh_message = {
             "integration": "aws.c7n",
             "msg": "c7n Result",
-            "matched_resource": resource,
+            "resource": resource,
           }
           for key in keylist:
             wazuh_message[key] = message_body[key]
